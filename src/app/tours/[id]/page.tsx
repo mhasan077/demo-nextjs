@@ -45,15 +45,16 @@ const tours = {
   }
 };
 
-export default function TourPage({ params }: { params: { id: string } }) {
+export default async function TourPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
   // Find the exact tour clicked from the main array
-  const clickedExperience = experiences.find((e: any) => e.id.toString() === params.id);
+  const clickedExperience = experiences.find((e: { id: number | string }) => e.id.toString() === id);
   
   // Use Italy data as fallback/demo for all tours to match pixel-by-pixel request
   // but override the main title and dynamic images.
-  const tourData = tours[params.id as keyof typeof tours] || {
+  const tourData = tours[id as keyof typeof tours] || {
     ...tours["2"],
-    title: clickedExperience?.title || `Tur Detalları (ID: ${params.id})`,
+    title: clickedExperience?.title || `Tur Detalları (ID: ${id})`,
     heroImage: clickedExperience?.image || tours["2"].heroImage,
     mainImage: clickedExperience?.image || tours["2"].mainImage,
     price: clickedExperience ? `${clickedExperience.price.toLocaleString("az-AZ")} AZN` : tours["2"].price,
