@@ -3,8 +3,9 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 
-export default function TourForm() {
+function TourForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const isEditing = searchParams.get('edit') !== null;
@@ -219,4 +220,12 @@ export default function TourForm() {
 
     </div>
   )
+}
+
+export default function TourFormPage() {
+  return (
+    <Suspense fallback={<div className="p-8 text-gray-500">Yüklənir...</div>}>
+      <TourForm />
+    </Suspense>
+  );
 }
